@@ -1,0 +1,1340 @@
+:root {
+    --primary-color: #3498db;
+    --primary-dark: #2980b9;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #34495e;
+    --text-color: #333;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow: hidden;
+    color: var(--text-color);
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(to bottom, var(--secondary-color), var(--dark-color));
+    color: white;
+    padding: 25px 20px;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    position: relative;
+    z-index: 10;
+    animation: slideInLeft 0.8s ease forwards;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.cat-icon {
+    font-size: 24px;
+    color: var(--accent-color);
+    margin-right: 10px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 22px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.accent {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* 工具组 */
+.tool-group {
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tool-group:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tool-selector {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tool-selector label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: var(--light-color);
+    font-size: 15px;
+}
+
+.tool-selector label i {
+    margin-right: 5px;
+    color: var(--primary-color);
+}
+
+.tool-dropdown {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--secondary-color);
+    font-size: 14px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tool-dropdown:hover, .tool-dropdown:focus {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    outline: none;
+}
+
+.tool-dropdown option {
+    background-color: white;
+    color: var(--secondary-color);
+    padding: 10px;
+}
+
+/* 控制面板 */
+.control-panel {
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.control-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.fullscreen-btn,
+.zoom-out-btn,
+.zoom-in-btn,
+.zoom-reset-btn,
+.exit-fullscreen-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--light-color);
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.fullscreen-btn:hover,
+.zoom-out-btn:hover,
+.zoom-in-btn:hover,
+.zoom-reset-btn:hover,
+.exit-fullscreen-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.fullscreen-btn {
+    background: var(--accent-color);
+}
+
+.zoom-level {
+    font-size: 12px;
+    color: var(--light-color);
+    margin: 0 5px;
+    width: 40px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 主内容区域 */
+.main-content {
+    flex: 1;
+    padding: 15px;
+    background-color: #f8f9fa;
+    height: 100%;
+    position: relative;
+}
+
+/* 网格布局 */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px;
+    height: 100%;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.grid-item {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.grid-item:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.window-header {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.window-title {
+    opacity: 0.9;
+}
+
+.window-controls {
+    display: flex;
+    gap: 5px;
+}
+
+/* 全屏模式 */
+.fullscreen-mode {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1000;
+    border-radius: 0;
+    animation: expandFullscreen 0.3s ease forwards;
+}
+
+@keyframes expandFullscreen {
+    from {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* iframe 样式 */
+.tool-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    flex: 1;
+    transform-origin: top left;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.tool-iframe[style*="display: block"] {
+    opacity: 1;
+}
+
+/* 添加iframe容器样式 */
+.iframe-container {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    display: none; /* 默认隐藏 */
+}
+
+/* 全屏模式下的iframe容器 */
+.fullscreen-mode .iframe-container {
+    width: 100%;
+    height: calc(100% - 38px); /* 标题栏高度 */
+}
+
+/* 占位符样式 */
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #7f8c8d;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(145deg, #f8f9fa, #e6e6e6);
+    font-size: 16px;
+    border-radius: 0 0 10px 10px;
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+}
+
+.placeholder-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    opacity: 0.7;
+}
+
+.placeholder p {
+    opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 250px;
+    }
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 220px;
+        padding: 15px;
+    }
+    
+    .tool-selector {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-height: 40vh;
+    }
+    
+    .grid-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+    }
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.active-window .window-header {
+    background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+    animation: loading 1.5s infinite ease-in-out;
+}
+
+@keyframes loading {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.zoom-reset-btn {
+    background: rgba(84, 160, 255, 0.2);
+    font-size: 11px;
+}
+
+.zoom-reset-btn:hover {
+    background: rgba(84, 160, 255, 0.4);
+}
+
+/* 加载动画样式 */
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 62, 80, 0.9);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: opacity 0.5s;
+}
+
+.loading-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 新的猫头加载动画 */
+.loading-cat-head {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 40px;
+    transform-origin: center;
+    animation: head-bounce 2s infinite alternate;
+}
+
+.loader-cat-face {
+    position: absolute;
+    width: 80px;
+    height: 70px;
+    background-color: var(--accent-color);
+    border-radius: 45%;
+    top: 25px;
+    left: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 猫耳朵 */
+.loader-cat-ear {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-bottom: 30px solid var(--accent-color);
+    top: -16px;
+    z-index: -1;
+}
+
+.loader-cat-ear-left {
+    left: 8px;
+    transform: rotate(-15deg);
+    animation: ear-wiggle-left 3s infinite alternate;
+}
+
+.loader-cat-ear-right {
+    right: 8px;
+    transform: rotate(15deg);
+    animation: ear-wiggle-right 3s infinite alternate;
+}
+
+/* 猫眼睛 */
+.loader-cat-eye {
+    position: absolute;
+    width: 16px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 25px;
+}
+
+.loader-cat-eye:after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    top: 3px;
+    left: 4px;
+    animation: blink-loader 4s infinite;
+}
+
+.loader-cat-eye-left {
+    left: 18px;
+}
+
+.loader-cat-eye-right {
+    right: 18px;
+}
+
+/* 猫鼻子 */
+.loader-cat-nose {
+    position: absolute;
+    width: 10px;
+    height: 7px;
+    background: #333;
+    border-radius: 50%;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 猫嘴巴 */
+.loader-cat-mouth {
+    position: absolute;
+    width: 16px;
+    height: 8px;
+    border-bottom: 2px solid #333;
+    border-radius: 50%;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 猫胡须 */
+.loader-cat-whisker {
+    position: absolute;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.6);
+    top: 42px;
+}
+
+.loader-whisker-left-top {
+    width: 20px;
+    left: -18px;
+    transform: rotate(-10deg);
+}
+
+.loader-whisker-left-bottom {
+    width: 16px;
+    left: -14px;
+    top: 46px;
+    transform: rotate(-5deg);
+}
+
+.loader-whisker-right-top {
+    width: 20px;
+    right: -18px;
+    transform: rotate(10deg);
+}
+
+.loader-whisker-right-bottom {
+    width: 16px;
+    right: -14px;
+    top: 46px;
+    transform: rotate(5deg);
+}
+
+/* 加载动画关键帧 */
+@keyframes head-bounce {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.05);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes ear-wiggle-left {
+    0%, 100% {
+        transform: rotate(-15deg);
+    }
+    50% {
+        transform: rotate(-20deg);
+    }
+}
+
+@keyframes ear-wiggle-right {
+    0%, 100% {
+        transform: rotate(15deg);
+    }
+    50% {
+        transform: rotate(20deg);
+    }
+}
+
+@keyframes blink-loader {
+    0%, 45%, 55%, 100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scaleY(0.1);
+        opacity: 0.8;
+    }
+}
+
+.loading-text {
+    font-size: 22px;
+    color: white;
+    margin-top: 30px;
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s infinite;
+}
+
+/* 工具加载动画 */
+.tool-loading-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: rgba(44, 62, 80, 0.9);
+    z-index: 9999;
+    transition: opacity 0.5s;
+}
+
+.tool-loading-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 气泡样式调整，确保文字不受猫咪翻转影响 */
+.cat-bubble {
+    position: absolute;
+    top: -40px;
+    right: 0px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    max-width: 120px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    transform-style: preserve-3d;
+    backface-visibility: visible;
+}
+
+.cat-bubble:after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 8px;
+    width: 10px;
+    height: 8px;
+    background-color: white;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* 像素猫向左翻转时的气泡样式 */
+.pixel-cat-container[style*="scaleX(-1)"] .cat-bubble {
+    transform: scaleX(-1);
+    left: 0px;
+    right: auto;
+}
+
+.pixel-cat-container[style*="scaleX(-1)"] .cat-bubble:after {
+    left: 8px;
+    right: auto;
+}
+
+.paw-print-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.paw-print {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.paw-print::before,
+.paw-print::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--accent-color);
+    border-radius: 50%;
+}
+
+.paw-print::before {
+    top: -6px;
+    left: 4px;
+}
+
+.paw-print::after {
+    top: -6px;
+    right: 4px;
+}
+
+.paw-print-1 {
+    animation: pawPrint 3s infinite;
+}
+
+.paw-print-2 {
+    animation: pawPrint 3s 0.5s infinite;
+}
+
+.paw-print-3 {
+    animation: pawPrint 3s 1s infinite;
+}
+
+.paw-print-4 {
+    animation: pawPrint 3s 1.5s infinite;
+}
+
+.paw-print-5 {
+    animation: pawPrint 3s 2s infinite;
+}
+
+/* 动画关键帧 */
+@keyframes breath {
+    0% {
+        transform: translate(-50%, -30%) scale(1);
+    }
+    100% {
+        transform: translate(-50%, -30%) scale(1.05);
+    }
+}
+
+@keyframes earWiggle {
+    0% {
+        transform: rotate(-30deg);
+    }
+    100% {
+        transform: rotate(-20deg);
+    }
+}
+
+@keyframes tailWag {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-20deg);
+    }
+}
+
+@keyframes pawStep {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes blink {
+    0%, 45%, 55%, 100% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(0.1);
+    }
+}
+
+@keyframes dots {
+    0%, 20% {
+        content: '.';
+    }
+    40%, 60% {
+        content: '..';
+    }
+    80%, 100% {
+        content: '...';
+    }
+}
+
+@keyframes pawPrint {
+    0%, 20% {
+        opacity: 0;
+        transform: scale(0.5) translate(-50px, 20px) rotate(-20deg);
+    }
+    30%, 70% {
+        opacity: 1;
+        transform: scale(1) translate(0, 0) rotate(0deg);
+    }
+    80%, 100% {
+        opacity: 0;
+        transform: scale(0.5) translate(50px, -20px) rotate(20deg);
+    }
+}
+
+/* 加载完成动画 */
+.load-complete {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: scaleUp 0.3s forwards;
+}
+
+.load-complete i {
+    color: var(--accent-color);
+    font-size: 20px;
+    animation: pawJump 0.5s forwards;
+}
+
+.load-complete i:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.load-complete i:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.load-complete.fade-out {
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes scaleUp {
+    from {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pawJump {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -70%);
+    }
+}
+
+/* 随机猫爪印效果 */
+.random-paw-print {
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+/* 页面加载时的入场动画 */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* 像素猫样式 - 像素块风格 */
+.pixel-cat-container {
+    position: fixed;
+    bottom: 15px;
+    left: -80px;
+    width: 70px;
+    height: 60px;
+    z-index: 9998;
+    pointer-events: auto;
+    transform: scale(1);
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
+    cursor: pointer;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* 增强像素感，添加全局像素栅格 */
+.pixel-cat {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: scale(1);
+    transform-origin: bottom left;
+}
+
+/* 像素风格变化时禁用平滑过渡 */
+.pixel-cat, .pixel-cat * {
+    transition: none;
+    animation-timing-function: steps(1) !important;
+}
+
+/* 全局像素栅格 - 移除多余的格子 */
+.pixel-cat-body {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: visible;
+    /* 移除背景网格，避免出现多余格子 */
+    background-image: none;
+}
+
+/* 猫咪像素网格效果 - 移除全局网格 */
+.pixel-cat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* 移除全局网格效果 */
+    background-image: none;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* 猫咪头部 - 优化像素网格效果 */
+.cat-head {
+    width: 28px;
+    height: 24px;
+    background-color: var(--accent-color);
+    position: absolute;
+    top: 8px;
+    left: 24px;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 2;
+    /* 只保留边缘线，形成更清晰的像素块感 */
+    background-image: none;
+    overflow: hidden;
+}
+
+/* 猫咪耳朵 - 像素三角形 */
+.cat-ear {
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-color);
+    position: absolute;
+    top: -8px;
+    z-index: 1;
+    transform: none;
+}
+
+.cat-ear.left {
+    left: 4px;
+    clip-path: polygon(0 100%, 100% 100%, 50% 0);
+}
+
+.cat-ear.right {
+    right: 4px;
+    clip-path: polygon(0 100%, 100% 100%, 50% 0);
+}
+
+.cat-ear-inner {
+    width: 4px;
+    height: 4px;
+    background-color: #dd5e54;
+    position: absolute;
+    bottom: 0;
+    left: 2px;
+    border-radius: 0;
+    clip-path: polygon(0 100%, 100% 100%, 50% 0);
+}
+
+/* 猫咪腿部 - 移除腿部的网格效果 */
+.cat-leg {
+    width: 6px;
+    height: 10px;
+    background-color: var(--accent-color);
+    position: absolute;
+    bottom: 2px;
+    z-index: 2;
+    border-radius: 0;
+    /* 移除小块腿部上的网格 */
+    background-image: none;
+}
+
+/* 更明显的像素边框 */
+.cat-head, .cat-body, .cat-leg, .cat-tail::before, .cat-tail::after {
+    box-shadow: 1px 0 0 0 rgba(0,0,0,0.5), 
+                0 1px 0 0 rgba(0,0,0,0.5), 
+                1px 1px 0 0 rgba(0,0,0,0.5);
+}
+
+/* 思考泡泡 - 镜像问题彻底修复 */
+.cat-bubble {
+    position: absolute;
+    top: -25px;
+    left: 15px;
+    background: white;
+    border-radius: 0;
+    padding: 4px;
+    font-size: 10px;
+    opacity: 0;
+    transition: none;
+    pointer-events: none;
+    box-shadow: 2px 0 0 rgba(0,0,0,0.5), 
+                0 2px 0 rgba(0,0,0,0.5), 
+                2px 2px 0 rgba(0,0,0,0.5);
+    max-width: 80px;
+    text-align: center;
+    line-height: 1.2;
+    z-index: 9999;
+    font-family: 'Courier New', monospace;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    /* 重要：确保文字不会被镜像，使用独立的变换上下文 */
+    transform-style: preserve-3d;
+}
+
+/* 当猫咪向左走时，气泡文字和指针需要单独处理 */
+.pixel-cat-container[style*="scaleX(-1)"] .cat-bubble {
+    /* 完全抵消父元素的翻转效果 */
+    transform: scaleX(-1);
+}
+
+/* 气泡指针位置修正，向左走时出现在右侧 */
+.pixel-cat-container[style*="scaleX(-1)"] .cat-bubble:after {
+    left: auto;
+    right: 8px;
+}
+
+.cat-bubble:after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 8px;
+    width: 8px;
+    height: 6px;
+    background-color: white;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.cat-bubble.visible {
+    opacity: 1;
+}
+
+/* 运动状态动画调整 */
+@keyframes cat-run {
+    0% {
+        height: 10px;
+    }
+    50% {
+        height: 6px;
+    }
+    100% {
+        height: 10px;
+    }
+}
+
+@keyframes tail-running {
+    0% {
+        transform: rotate(10deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-10deg);
+    }
+}
+
+/* 眨眼修改为像素风格 */
+.cat-eye.blink {
+    height: 2px;
+    top: 12px;
+}
+
+/* 特殊动作像素风格 */
+.pixel-cat.special-action {
+    animation: cat-pixel-jump 1s forwards;
+}
+
+@keyframes cat-pixel-jump {
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-4px);
+    }
+    50% {
+        transform: translateY(-16px);
+    }
+    75% {
+        transform: translateY(-4px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* 猫咪动画和状态 - 像素风格 */
+.cat-tongue.visible {
+    opacity: 1;
+}
+
+/* 跑动时的腿部动画 */
+.pixel-cat.running .cat-leg {
+    animation: cat-run 0.4s infinite;
+}
+
+.pixel-cat.running .cat-leg.front-right,
+.pixel-cat.running .cat-leg.back-left {
+    animation-delay: 0.2s;
+}
+
+/* 猫咪状态动画 */
+.pixel-cat.running .cat-tail {
+    animation: tail-running 0.4s infinite alternate;
+}
+
+.pixel-cat.sitting .cat-body {
+    height: 16px;
+    bottom: 8px;
+    border-radius: 0;
+}
+
+.pixel-cat.sitting .cat-leg {
+    height: 6px;
+}
+
+.pixel-cat.sitting .cat-tail {
+    bottom: 12px;
+    animation: tail-sitting 2s infinite alternate;
+}
+
+.pixel-cat.licking .cat-leg.front-left {
+    height: 12px;
+    transform: rotate(45deg);
+    bottom: 6px;
+}
+
+.pixel-cat.licking .cat-tongue {
+    animation: lick 1s infinite;
+}
+
+.pixel-cat.sleeping .cat-eye {
+    height: 2px;
+    top: 12px;
+}
+
+.pixel-cat.sleeping .cat-mouth {
+    width: 4px;
+    height: 4px;
+    border: none;
+    background-color: #222;
+    border-radius: 0;
+    opacity: 0.7;
+}
+
+.pixel-cat.happy .cat-mouth {
+    width: 10px;
+    height: 4px;
+    border-top: 2px solid #222;
+    border-bottom: none;
+    top: 18px;
+}
+
+.pixel-cat.happy .cat-eye {
+    height: 4px;
+    border-radius: 0;
+    background: transparent;
+    border-bottom: 2px solid #222;
+    top: 10px;
+}
+
+.pixel-cat.excited .cat-tail {
+    animation: tail-excited 0.2s infinite alternate;
+}
+
+.pixel-cat.curious .cat-head {
+    animation: head-tilt 2s infinite alternate;
+}
+
+.pixel-cat.playing .cat-body {
+    animation: body-bounce 0.5s infinite alternate;
+}
+
+.pixel-cat.playing .cat-leg {
+    animation: leg-play 0.5s infinite alternate;
+}
+
+/* 扩展猫咪动画效果 */
+.pixel-cat.special-action .cat-tail {
+    animation: tail-excited 0.2s infinite alternate;
+}
+
+.pixel-cat.special-action .cat-leg {
+    animation: leg-play 0.3s infinite alternate;
+}
+
+/* 扩展对话泡泡效果 - 像素风格 */
+.cat-bubble.visible {
+    opacity: 1;
+    animation: bubble-pixel-pop 0.3s forwards;
+}
+
+@keyframes bubble-pixel-pop {
+    0% {
+        transform: scale(0.5);
+    }
+    33% {
+        transform: scale(0.8);
+    }
+    66% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 动画关键帧 - 像素风格 */
+@keyframes tail-sitting {
+    0% {
+        transform: rotate(30deg);
+    }
+    50% {
+        transform: rotate(15deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes lick {
+    0%, 100% {
+        opacity: 0;
+    }
+    30%, 70% {
+        opacity: 1;
+    }
+}
+
+@keyframes tail-excited {
+    0% {
+        transform: rotate(20deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-20deg);
+    }
+}
+
+@keyframes head-tilt {
+    0% {
+        transform: translateX(-2px);
+    }
+    100% {
+        transform: translateX(2px);
+    }
+}
+
+@keyframes body-bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes leg-play {
+    0% {
+        height: 6px;
+    }
+    100% {
+        height: 10px;
+    }
+} 

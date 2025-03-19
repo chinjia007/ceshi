@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神奇喵喵AI聚合平台</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 加载诊断界面样式 */
+        .load-diagnosis {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .load-diagnosis h3 {
+            color: #e74c3c;
+            margin-top: 0;
+        }
+        
+        .load-diagnosis ul {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .load-diagnosis button {
+            margin: 5px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .retry-button {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .retry-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .new-tab-button {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .new-tab-button:hover {
+            background-color: #27ae60;
+        }
+        
+        /* 猫爪动画样式 - 真实猫爪风格 */
+        .cat-paws-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .cat-paw {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            animation: paw-press 0.8s infinite ease-in-out;
+            transform-origin: center bottom;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 移除左右两侧的伪元素 */
+        .cat-paw:before, .cat-paw:after {
+            display: none;
+        }
+        
+        /* 移除中间指甲 */
+        .cat-paw .paw-claw {
+            display: none;
+        }
+        
+        .cat-paw:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .cat-paw:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        
+        .cat-paw:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        
+        /* 主肉垫 - 改为大的中央肉垫 */
+        .cat-paw .paw-pad {
+            position: absolute;
+            background-color: #ff9999;
+            border-radius: 50%;
+            width: 14px;
+            height: 12px;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 重新定义小肉垫，改为3个 */
+        .cat-paw .paw-dot {
+            position: absolute;
+            background-color: #ff9999;
+            border-radius: 50%;
+            width: 6px;
+            height: 5px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 左上小肉垫 */
+        .cat-paw .paw-dot.dot1 {
+            top: 3px;
+            left: 3px;
+        }
+        
+        /* 右上小肉垫 */
+        .cat-paw .paw-dot.dot2 {
+            top: 3px;
+            right: 3px;
+        }
+        
+        /* 顶部中间小肉垫 */
+        .cat-paw .paw-dot.dot3 {
+            top: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* 移除第四个小肉垫 */
+        .cat-paw .paw-dot.dot4 {
+            display: none;
+        }
+        
+        @keyframes paw-press {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(3px) scale(1.05, 0.95);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* 为窗口内的加载动画添加迷你猫爪样式 */
+        .cat-paws-container.mini {
+            gap: 8px;
+            margin: 12px 0;
+        }
+        
+        .cat-paws-container.mini .cat-paw {
+            width: 16px;
+            height: 16px;
+            background-color: #e74c3c;
+        }
+        
+        .cat-paws-container.mini .paw-pad {
+            width: 9px;
+            height: 8px;
+            bottom: 3px;
+        }
+        
+        .cat-paws-container.mini .paw-dot {
+            width: 4px;
+            height: 3px;
+        }
+        
+        .cat-paws-container.mini .paw-dot.dot1 {
+            top: 2px;
+            left: 2px;
+        }
+        
+        .cat-paws-container.mini .paw-dot.dot2 {
+            top: 2px;
+            right: 2px;
+        }
+        
+        .cat-paws-container.mini .paw-dot.dot3 {
+            top: 1px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* 加载动画基础样式调整 */
+        .tool-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            visibility: visible;
+        }
+        
+        /* 隐藏加载动画 */
+        .tool-loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        /* 主页加载动画 */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            visibility: visible;
+        }
+        
+        .loading-container.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        /* 调整主页面加载动画的猫爪尺寸 */
+        #loadingScreen .cat-paw,
+        #toolLoading .cat-paw {
+            width: 32px;
+            height: 32px;
+        }
+        
+        #loadingScreen .paw-pad,
+        #toolLoading .paw-pad {
+            width: 18px;
+            height: 15px;
+            bottom: 5px;
+        }
+        
+        #loadingScreen .paw-dot,
+        #toolLoading .paw-dot {
+            width: 8px;
+            height: 7px;
+        }
+        
+        #loadingScreen .paw-dot.dot1,
+        #toolLoading .paw-dot.dot1 {
+            top: 4px;
+            left: 4px;
+        }
+        
+        #loadingScreen .paw-dot.dot2,
+        #toolLoading .paw-dot.dot2 {
+            top: 4px;
+            right: 4px;
+        }
+        
+        #loadingScreen .paw-dot.dot3,
+        #toolLoading .paw-dot.dot3 {
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* 加载文字动画 */
+        .loading-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: loading-dots 1.5s infinite;
+        }
+        
+        @keyframes loading-dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+
+        /* 为占位符添加像素风格蹲坐猫 */
+        .placeholder-cat-head {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            background-color: rgba(120, 120, 120, 0.2) !important; /* 强制统一颜色和透明度 */
+            border-radius: 0;
+            margin: 0 auto 15px;
+            image-rendering: pixelated;
+            box-shadow: none !important;
+            clip-path: none;
+        }
+
+        /* 猫耳朵 */
+        .placeholder-cat-ear {
+            display: block;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(120, 120, 120, 0.2) !important; /* 强制统一颜色和透明度 */
+            border-radius: 0;
+            top: -8px;
+            image-rendering: pixelated;
+        }
+
+        .placeholder-cat-ear.left {
+            left: 10px;
+            clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
+        }
+
+        .placeholder-cat-ear.right {
+            right: 10px;
+            clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
+        }
+
+        /* 移除内耳 */
+        .placeholder-cat-inner-ear {
+            display: none;
+        }
+
+        /* 移除嘴巴区域 */
+        .placeholder-cat-mouth-area {
+            display: none;
+        }
+
+        /* 猫眼睛 */
+        .placeholder-cat-eye {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: rgba(170, 0, 255, 0.2) !important; /* 强制统一颜色和透明度 */
+            border-radius: 0;
+            top: 15px;
+            image-rendering: pixelated;
+        }
+
+        .placeholder-cat-eye.left {
+            left: 12px;
+        }
+
+        .placeholder-cat-eye.right {
+            right: 12px;
+        }
+
+        /* 移除瞳孔 */
+        .placeholder-cat-pupil {
+            display: none;
+        }
+
+        /* 鼻子 */
+        .placeholder-cat-nose {
+            display: block;
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(0, 0, 0, 0.2) !important; /* 强制统一颜色和透明度 */
+            border-radius: 0;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            image-rendering: pixelated;
+        }
+
+        /* 移除嘴巴和胡须 */
+        .placeholder-cat-mouth, .placeholder-cat-whisker {
+            display: none;
+        }
+
+        /* 添加猫尾巴 */
+        .placeholder-cat-tail {
+            display: block;
+            position: absolute;
+            width: 16px;
+            height: 6px;
+            background-color: rgba(120, 120, 120, 0.2) !important; /* 强制统一颜色和透明度 */
+            border-radius: 0;
+            top: 25px;
+            right: -15px;
+            transform: rotate(35deg);
+            image-rendering: pixelated;
+        }
+
+        /* 添加猫前爪 */
+        .placeholder-cat-paw {
+            display: block;
+            position: absolute;
+            width: 10px;
+            height: 5px;
+            background-color: rgba(120, 120, 120, 0.2) !important; /* 强制统一颜色和透明度 */
+            border-radius: 0;
+            bottom: 5px;
+            image-rendering: pixelated;
+        }
+
+        .placeholder-cat-paw.left {
+            left: 10px;
+        }
+
+        .placeholder-cat-paw.right {
+            right: 10px;
+        }
+
+        /* 确保所有窗口的占位符背景一致 */
+        .placeholder {
+            background-color: #f8f9fa !important; /* 浅灰背景，与主内容区域背景一致 */
+            text-align: center;
+            padding: 30px 0;
+            border-radius: 8px;
+            box-shadow: none !important;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px dashed #dddddd; /* 添加虚线边框提示可交互性 */
+        }
+
+        /* 确保所有grid-item容器完全一致 */
+        .grid-item {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important; /* 强制统一阴影 */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 100%;
+            position: relative;
+            border: 1px solid #e8e8e8; /* 添加统一的细边框 */
+        }
+
+        /* 确保四个窗口ID不会有特定样式覆盖 */
+        #window1, #window2, #window3, #window4 {
+            background-color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        /* 统一窗口标题样式 */
+        .window-header {
+            background-color: #2c3e50; /* 使用侧边栏的--secondary-color */
+            border-bottom: 1px solid #34495e; /* 使用--dark-color作为边框 */
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff; /* 确保所有文本都是白色 */
+        }
+
+        /* 窗口标题中的按钮颜色调整 */
+        .window-header button {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            padding: 5px 8px;
+            margin-left: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .window-header button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .window-header button:active {
+            transform: scale(0.95);
+        }
+        
+        /* 刷新按钮样式 */
+        .refresh-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .refresh-btn i {
+            font-size: 14px;
+            transition: transform 0.2s ease;
+        }
+        
+        /* 刷新按钮动画效果 - 改进版 */
+        @keyframes rotate-smooth {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 旋转中的图标类 */
+        .refresh-btn i.rotating {
+            animation: rotate-smooth 1.2s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+            transform-origin: center;
+        }
+        
+        /* 悬浮时的轻微旋转 */
+        .refresh-btn:hover:not(:active) i:not(.rotating) {
+            transform: rotate(45deg);
+        }
+        
+        /* 点击时的效果 */
+        .refresh-btn:active i:not(.rotating) {
+            transform: rotate(180deg);
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        /* 旧的动画，保留但不使用 */
+        .refresh-btn.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        /* 调整网格布局，确保所有窗口尺寸一致 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 15px;
+            height: calc(100vh - 40px);
+            padding: 15px;
+            background-color: #f8f9fa !important; /* 统一网格背景 */
+        }
+
+        /* 主内容区域背景统一 */
+        .main-content {
+            background-color: #f8f9fa !important;
+            overflow: hidden;
+        }
+
+        /* 平铺背景 */
+        body {
+            background-color: #f8f9fa !important;
+        }
+
+        /* 移除所有的hover效果，以防止视觉差异 */
+        .grid-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+            transform: none !important;
+        }
+
+        /* 统一占位符文字颜色 */
+        .placeholder p {
+            color: #555555 !important; /* 修改为深灰色，比白色更易读 */
+            font-size: 14px !important;
+            margin-top: 10px !important;
+            text-shadow: none; /* 移除文字阴影，灰色文本不需要阴影 */
+            font-weight: 500 !important; /* 稍微加粗以提高可读性 */
+        }
+
+        /* 修改像素猫颜色，使其与新背景和文字颜色协调 */
+        .placeholder-cat-head, .placeholder-cat-ear, .placeholder-cat-paw, .placeholder-cat-tail {
+            background-color: rgba(180, 180, 180, 0.3) !important; /* 更深的灰色 */
+        }
+        
+        .placeholder-cat-eye {
+            background-color: rgba(100, 100, 100, 0.4) !important; /* 更深的灰色 */
+        }
+        
+        .placeholder-cat-nose {
+            background-color: rgba(80, 80, 80, 0.5) !important; /* 更深的灰色 */
+        }
+
+        /* 完善的选择框呼吸光效果 */
+        .tool-dropdown {
+            position: relative;
+            background-color: #ffffff;
+            color: #333333;
+            font-size: 15px;
+            font-weight: 500;
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 1;
+            border: 2px solid transparent; /* 边框设为透明，使用伪元素实现边框效果 */
+            background-clip: padding-box;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            transform-origin: center center;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+            overflow: hidden; /* 确保金属光泽效果不溢出 */
+        }
+        
+        /* 流动边框光效 - 使用伪元素生成容器大小的背景 */
+        .tool-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -3px; /* 向外扩展一点以显示边框效果 */
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            z-index: -1;
+            border-radius: 8px;
+            background: linear-gradient(90deg, 
+                #9900ff, #9400d3, #8e44ad, #673ab7, #4b0082, #1e88e5, #00bfff, #00ffff, #00fa9a, #4caf50, #32cd32, #00ff00, #9900ff);
+            background-size: 800% 100%; /* 增加尺寸使渐变更广泛 */
+            animation: border-flow 6s linear infinite; /* 只保留流动边框动画，移除呼吸效果 */
+            opacity: 0.75; /* 提高默认状态下的不透明度 */
+            box-shadow: 
+                0 0 8px rgba(148, 0, 211, 0.5), /* 紫色阴影 */
+                0 0 15px rgba(0, 191, 255, 0.4); /* 蓝色阴影 */
+            transform: translateZ(0);
+            filter: brightness(1.2) saturate(1.5) blur(0.5px);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        /* 内部白色背景蒙版 - 创建内容背景并显示高光扫光效果 */
+        .tool-dropdown::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ffffff;
+            border-radius: 4px; /* 略小于外层边框的圆角 */
+            z-index: -1; /* 放在渐变背景上面但在内容下面 */
+            overflow: hidden; /* 裁剪高光效果 */
+            pointer-events: none; /* 确保不影响鼠标交互 */
+        }
+
+        /* 添加高光扫光效果到内部背景 */
+        .tool-dropdown::after {
+            background: 
+                linear-gradient(
+                    to right,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0) 40%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    rgba(255, 255, 255, 0) 60%,
+                    rgba(255, 255, 255, 0) 100%
+                ),
+                #ffffff; /* 白色背景和高光效果叠加 */
+            background-size: 200% 100%;
+            animation: sweep-light 8s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+        }
+
+        /* 扫光动画 */
+        @keyframes sweep-light {
+            0% {
+                background-position: -150% 0;
+            }
+            40%, 100% {
+                background-position: 250% 0;
+            }
+        }
+
+        /* 添加流动边框光线动画 */
+        @keyframes border-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 800% 50%; } /* 匹配扩大后的背景尺寸 */
+        }
+
+        @keyframes focus-border-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 1000% 50%; }
+        }
+
+        .tool-dropdown:hover {
+            background-color: #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* 激活状态的按压效果 - 优化抖动问题 */
+        .tool-dropdown:active {
+            transform: scale(0.99);
+            background-color: #f8f8f8; /* 点击状态略微变暗 */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            will-change: transform;
+        }
+
+        /* 移除完全重写焦点状态的样式 */
+        .tool-dropdown:focus {
+            outline: none;
+            box-shadow: none;
+            border: none;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 聚焦时的特效 */
+        .tool-dropdown:focus::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            z-index: -1;
+            border-radius: 8px;
+            background: linear-gradient(90deg, 
+                #ff00cc, #8a2be2, #4b0082, #0000ff, #00bfff, #00ffff, #00ff7f, #7cfc00, #00ff00, #00bfff, #0000ff, #4b0082, #8a2be2, #ff00cc);
+            background-size: 1000% 100%;
+            animation: focus-border-flow 2s linear infinite;
+            opacity: 1;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 204, 0.9),
+                0 0 30px rgba(138, 43, 226, 0.8),
+                0 0 40px rgba(0, 255, 127, 0.7);
+            filter: brightness(1.7) saturate(2.0) blur(0);
+        }
+        
+        /* 悬停时激活全部效果 */
+        .tool-dropdown:hover::before {
+            filter: brightness(2.0) saturate(2.2) blur(0);
+            opacity: 0.9;
+            animation: border-flow 3s linear infinite; /* 加快流动速度 */
+            box-shadow: 
+                0 0 20px rgba(148, 0, 211, 0.8), /* 紫色阴影 */
+                0 0 30px rgba(0, 191, 255, 0.7); /* 蓝色阴影 */
+        }
+        
+        /* 移除force-focus类，不再需要 */
+        .force-focus {
+            position: relative;
+        }
+        
+        .force-focus::before {
+            content: none; /* 禁用此效果 */
+        }
+
+        /* 窗口标题样式增强 */
+        .window-title {
+            opacity: 1; /* 提高不透明度 */
+            font-size: 15px; /* 增大字体 */
+            font-weight: 600; /* 增加字体粗细 */
+            color: #ffffff; /* 修改为白色 */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* 修改文字阴影增强可读性 */
+            padding: 0 5px; /* 添加内边距 */
+        }
+
+        /* 创建流动边框效果容器 - 恢复误删的样式 */
+        .tool-selector {
+            position: relative;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1); /* 匹配下拉框的过渡效果 */
+            border-radius: 4px; /* 添加轻微的圆角 */
+        }
+
+        .tool-selector:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 优化点击效果，防止抖动 */
+        .tool-selector:active {
+            background: rgba(255, 255, 255, 0.12); /* 轻微的背景色变化 */
+            transition: background 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        /* 修改选择器的hover效果，使其与下拉框边框互补 */
+        .tool-selector::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-radius: 0 0 6px 6px;
+            background: linear-gradient(90deg, 
+                rgba(255, 0, 204, 0.1), 
+                rgba(153, 102, 255, 0.1), 
+                rgba(0, 255, 255, 0.1));
+            background-size: 200% 200%;
+            z-index: 0;
+        }
+
+        .tool-selector:hover::after {
+            opacity: 1;
+            animation: breathing-border 3s ease infinite;
+        }
+
+        @keyframes breathing-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 下拉选项样式优化 */
+        .tool-dropdown option {
+            background-color: white;
+            color: #333333; /* 更深的文字颜色 */
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+            font-size: 15px; /* 增大字体 */
+            font-weight: 500; /* 增加字体粗细 */
+        }
+
+        /* 自定义下拉箭头 */
+        .tool-dropdown {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007AFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 30px;
+        }
+
+        /* 添加标签特效 */
+        .tool-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ffffff; /* 改为白色 */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3); /* 添加文字阴影增强可读性 */
+            transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1); /* 匹配下拉框的过渡效果 */
+            user-select: none; /* 防止文本被选中导致的闪烁 */
+        }
+
+        .tool-selector:hover label {
+            color: #ffffff; /* 保持白色 */
+            transform: translateX(2px);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5); /* 悬停时加强阴影 */
+            opacity: 0.9; /* 轻微降低不透明度代替颜色变化 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div class="loading-container" id="loadingScreen">
+        <!-- 3只可爱的动态猫爪 -->
+        <div class="cat-paws-container">
+            <div class="cat-paw paw-left">
+                <div class="paw-claw"></div>
+                <div class="paw-pad"></div>
+                <div class="paw-dot dot1"></div>
+                <div class="paw-dot dot2"></div>
+                <div class="paw-dot dot3"></div>
+                <div class="paw-dot dot4"></div>
+            </div>
+            <div class="cat-paw paw-center">
+                <div class="paw-claw"></div>
+                <div class="paw-pad"></div>
+                <div class="paw-dot dot1"></div>
+                <div class="paw-dot dot2"></div>
+                <div class="paw-dot dot3"></div>
+                <div class="paw-dot dot4"></div>
+            </div>
+            <div class="cat-paw paw-right">
+                <div class="paw-claw"></div>
+                <div class="paw-pad"></div>
+                <div class="paw-dot dot1"></div>
+                <div class="paw-dot dot2"></div>
+                <div class="paw-dot dot3"></div>
+                <div class="paw-dot dot4"></div>
+            </div>
+        </div>
+        <div class="loading-text">正在加载<span class="loading-dots"></span></div>
+    </div>
+
+    <!-- 工具窗口加载动画 -->
+    <div class="tool-loading-container hidden" id="toolLoading">
+        <!-- 3只可爱的动态猫爪 -->
+        <div class="cat-paws-container">
+            <div class="cat-paw paw-left">
+                <div class="paw-claw"></div>
+                <div class="paw-pad"></div>
+                <div class="paw-dot dot1"></div>
+                <div class="paw-dot dot2"></div>
+                <div class="paw-dot dot3"></div>
+                <div class="paw-dot dot4"></div>
+            </div>
+            <div class="cat-paw paw-center">
+                <div class="paw-claw"></div>
+                <div class="paw-pad"></div>
+                <div class="paw-dot dot1"></div>
+                <div class="paw-dot dot2"></div>
+                <div class="paw-dot dot3"></div>
+                <div class="paw-dot dot4"></div>
+            </div>
+            <div class="cat-paw paw-right">
+                <div class="paw-claw"></div>
+                <div class="paw-pad"></div>
+                <div class="paw-dot dot1"></div>
+                <div class="paw-dot dot2"></div>
+                <div class="paw-dot dot3"></div>
+                <div class="paw-dot dot4"></div>
+            </div>
+        </div>
+        <div class="loading-text">正在加载<span class="loading-dots"></span></div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo-container">
+                <i class="fas fa-cat cat-icon"></i>
+                <h2>神奇喵喵<span class="accent">AI</span>平台</h2>
+            </div>
+            
+            <div class="tool-group">
+                <div class="tool-selector">
+                    <label for="tool1"><i class="fas fa-window-maximize"></i> 窗口 1：</label>
+                    <select id="tool1" class="tool-dropdown">
+                        <option value="">请选择工具</option>
+                        <option value="https://yuanbao.tencent.com/chat/">元宝</option>
+                        <option value="https://www.doubao.com/chat/">豆包</option>
+                        <option value="https://kimi.moonshot.cn/">kimi</option>
+                        <option value="https://klingai.kuaishou.com/">可灵AI</option>
+                        <option value="https://metaso.cn/">秘塔搜索</option>
+                        <option value="https://chatglm.cn/chat">智谱清言</option>
+                    </select>
+                </div>
+                <div class="control-panel" data-window="1">
+                    <div class="control-buttons">
+                        <button class="fullscreen-btn" title="全屏显示"><i class="fas fa-expand"></i></button>
+                        <div class="zoom-controls">
+                            <button class="zoom-out-btn" title="缩小页面"><i class="fas fa-search-minus"></i></button>
+                            <span class="zoom-level">100%</span>
+                            <button class="zoom-in-btn" title="放大页面"><i class="fas fa-search-plus"></i></button>
+                            <button class="zoom-reset-btn" title="恢复默认大小"><i class="fas fa-compress-arrows-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tool-group">
+                <div class="tool-selector">
+                    <label for="tool2"><i class="fas fa-window-maximize"></i> 窗口 2：</label>
+                    <select id="tool2" class="tool-dropdown">
+                        <option value="">请选择工具</option>
+                        <option value="https://yuanbao.tencent.com/chat/">元宝</option>
+                        <option value="https://www.doubao.com/chat/">豆包</option>
+                        <option value="https://kimi.moonshot.cn/">kimi</option>
+                        <option value="https://klingai.kuaishou.com/">可灵AI</option>
+                        <option value="https://metaso.cn/">秘塔搜索</option>
+                        <option value="https://chatglm.cn/chat">智谱清言</option>
+                    </select>
+                </div>
+                <div class="control-panel" data-window="2">
+                    <div class="control-buttons">
+                        <button class="fullscreen-btn" title="全屏显示"><i class="fas fa-expand"></i></button>
+                        <div class="zoom-controls">
+                            <button class="zoom-out-btn" title="缩小页面"><i class="fas fa-search-minus"></i></button>
+                            <span class="zoom-level">100%</span>
+                            <button class="zoom-in-btn" title="放大页面"><i class="fas fa-search-plus"></i></button>
+                            <button class="zoom-reset-btn" title="恢复默认大小"><i class="fas fa-compress-arrows-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tool-group">
+                <div class="tool-selector">
+                    <label for="tool3"><i class="fas fa-window-maximize"></i> 窗口 3：</label>
+                    <select id="tool3" class="tool-dropdown">
+                        <option value="">请选择工具</option>
+                        <option value="https://yuanbao.tencent.com/chat/">元宝</option>
+                        <option value="https://www.doubao.com/chat/">豆包</option>
+                        <option value="https://kimi.moonshot.cn/">kimi</option>
+                        <option value="https://klingai.kuaishou.com/">可灵AI</option>
+                        <option value="https://metaso.cn/">秘塔搜索</option>
+                        <option value="https://chatglm.cn/chat">智谱清言</option>
+                    </select>
+                </div>
+                <div class="control-panel" data-window="3">
+                    <div class="control-buttons">
+                        <button class="fullscreen-btn" title="全屏显示"><i class="fas fa-expand"></i></button>
+                        <div class="zoom-controls">
+                            <button class="zoom-out-btn" title="缩小页面"><i class="fas fa-search-minus"></i></button>
+                            <span class="zoom-level">100%</span>
+                            <button class="zoom-in-btn" title="放大页面"><i class="fas fa-search-plus"></i></button>
+                            <button class="zoom-reset-btn" title="恢复默认大小"><i class="fas fa-compress-arrows-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tool-group">
+                <div class="tool-selector">
+                    <label for="tool4"><i class="fas fa-window-maximize"></i> 窗口 4：</label>
+                    <select id="tool4" class="tool-dropdown">
+                        <option value="">请选择工具</option>
+                        <option value="https://yuanbao.tencent.com/chat/">元宝</option>
+                        <option value="https://www.doubao.com/chat/">豆包</option>
+                        <option value="https://kimi.moonshot.cn/">kimi</option>
+                        <option value="https://klingai.kuaishou.com/">可灵AI</option>
+                        <option value="https://metaso.cn/">秘塔搜索</option>
+                        <option value="https://chatglm.cn/chat">智谱清言</option>
+                    </select>
+                </div>
+                <div class="control-panel" data-window="4">
+                    <div class="control-buttons">
+                        <button class="fullscreen-btn" title="全屏显示"><i class="fas fa-expand"></i></button>
+                        <div class="zoom-controls">
+                            <button class="zoom-out-btn" title="缩小页面"><i class="fas fa-search-minus"></i></button>
+                            <span class="zoom-level">100%</span>
+                            <button class="zoom-in-btn" title="放大页面"><i class="fas fa-search-plus"></i></button>
+                            <button class="zoom-reset-btn" title="恢复默认大小"><i class="fas fa-compress-arrows-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <p>附近有🐱出没，请注意</p>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="grid-container">
+                <div class="grid-item" id="window1">
+                    <div class="window-header">
+                        <span class="window-title">窗口 1</span>
+                        <div class="window-controls">
+                            <button class="refresh-btn" title="刷新页面"><i class="fas fa-sync-alt"></i></button>
+                            <button class="exit-fullscreen-btn" title="退出全屏" style="display: none;"><i class="fas fa-compress"></i></button>
+                        </div>
+                    </div>
+                    <div class="placeholder">
+                        <div class="placeholder-cat-head">
+                            <div class="placeholder-cat-ear left"></div>
+                            <div class="placeholder-cat-ear right"></div>
+                            <div class="placeholder-cat-eye left"></div>
+                            <div class="placeholder-cat-eye right"></div>
+                            <div class="placeholder-cat-nose"></div>
+                            <div class="placeholder-cat-tail"></div>
+                            <div class="placeholder-cat-paw left"></div>
+                            <div class="placeholder-cat-paw right"></div>
+                        </div>
+                        <p>请从左侧选择工具加载到窗口 1</p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe id="iframe1" class="tool-iframe" style="display:none"></iframe>
+                        <!-- 工具加载动画 -->
+                        <div class="tool-loading hidden" id="toolLoader1">
+                            <div class="cat-paws-container mini">
+                                <div class="cat-paw paw-left">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-center">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-right">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                            </div>
+                            <div class="loading-text">正在加载<span class="loading-dots"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-item" id="window2">
+                    <div class="window-header">
+                        <span class="window-title">窗口 2</span>
+                        <div class="window-controls">
+                            <button class="refresh-btn" title="刷新页面"><i class="fas fa-sync-alt"></i></button>
+                            <button class="exit-fullscreen-btn" title="退出全屏" style="display: none;"><i class="fas fa-compress"></i></button>
+                        </div>
+                    </div>
+                    <div class="placeholder">
+                        <div class="placeholder-cat-head">
+                            <div class="placeholder-cat-ear left"></div>
+                            <div class="placeholder-cat-ear right"></div>
+                            <div class="placeholder-cat-eye left"></div>
+                            <div class="placeholder-cat-eye right"></div>
+                            <div class="placeholder-cat-nose"></div>
+                            <div class="placeholder-cat-tail"></div>
+                            <div class="placeholder-cat-paw left"></div>
+                            <div class="placeholder-cat-paw right"></div>
+                        </div>
+                        <p>请从左侧选择工具加载到窗口 2</p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe id="iframe2" class="tool-iframe" style="display:none"></iframe>
+                        <!-- 工具加载动画 -->
+                        <div class="tool-loading hidden" id="toolLoader2">
+                            <div class="cat-paws-container mini">
+                                <div class="cat-paw paw-left">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-center">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-right">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                            </div>
+                            <div class="loading-text">正在加载<span class="loading-dots"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-item" id="window3">
+                    <div class="window-header">
+                        <span class="window-title">窗口 3</span>
+                        <div class="window-controls">
+                            <button class="refresh-btn" title="刷新页面"><i class="fas fa-sync-alt"></i></button>
+                            <button class="exit-fullscreen-btn" title="退出全屏" style="display: none;"><i class="fas fa-compress"></i></button>
+                        </div>
+                    </div>
+                    <div class="placeholder">
+                        <div class="placeholder-cat-head">
+                            <div class="placeholder-cat-ear left"></div>
+                            <div class="placeholder-cat-ear right"></div>
+                            <div class="placeholder-cat-eye left"></div>
+                            <div class="placeholder-cat-eye right"></div>
+                            <div class="placeholder-cat-nose"></div>
+                            <div class="placeholder-cat-tail"></div>
+                            <div class="placeholder-cat-paw left"></div>
+                            <div class="placeholder-cat-paw right"></div>
+                        </div>
+                        <p>请从左侧选择工具加载到窗口 3</p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe id="iframe3" class="tool-iframe" style="display:none"></iframe>
+                        <!-- 工具加载动画 -->
+                        <div class="tool-loading hidden" id="toolLoader3">
+                            <div class="cat-paws-container mini">
+                                <div class="cat-paw paw-left">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-center">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-right">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                            </div>
+                            <div class="loading-text">正在加载<span class="loading-dots"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-item" id="window4">
+                    <div class="window-header">
+                        <span class="window-title">窗口 4</span>
+                        <div class="window-controls">
+                            <button class="refresh-btn" title="刷新页面"><i class="fas fa-sync-alt"></i></button>
+                            <button class="exit-fullscreen-btn" title="退出全屏" style="display: none;"><i class="fas fa-compress"></i></button>
+                        </div>
+                    </div>
+                    <div class="placeholder">
+                        <div class="placeholder-cat-head">
+                            <div class="placeholder-cat-ear left"></div>
+                            <div class="placeholder-cat-ear right"></div>
+                            <div class="placeholder-cat-eye left"></div>
+                            <div class="placeholder-cat-eye right"></div>
+                            <div class="placeholder-cat-nose"></div>
+                            <div class="placeholder-cat-tail"></div>
+                            <div class="placeholder-cat-paw left"></div>
+                            <div class="placeholder-cat-paw right"></div>
+                        </div>
+                        <p>请从左侧选择工具加载到窗口 4</p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe id="iframe4" class="tool-iframe" style="display:none"></iframe>
+                        <!-- 工具加载动画 -->
+                        <div class="tool-loading hidden" id="toolLoader4">
+                            <div class="cat-paws-container mini">
+                                <div class="cat-paw paw-left">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-center">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                                <div class="cat-paw paw-right">
+                                    <div class="paw-claw"></div>
+                                    <div class="paw-pad"></div>
+                                    <div class="paw-dot dot1"></div>
+                                    <div class="paw-dot dot2"></div>
+                                    <div class="paw-dot dot3"></div>
+                                    <div class="paw-dot dot4"></div>
+                                </div>
+                            </div>
+                            <div class="loading-text">正在加载<span class="loading-dots"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    
+    <!-- 像素猫 -->
+    <div class="pixel-cat-container" id="pixelCat">
+        <div class="pixel-cat running">
+            <div class="pixel-cat-body">
+                <!-- 身体 -->
+                <div class="cat-body"></div>
+                
+                <!-- 头部 -->
+                <div class="cat-head">
+                    <!-- 猫咪高亮 -->
+                    <div class="cat-highlight"></div>
+                    
+                    <!-- 耳朵 -->
+                    <div class="cat-ear left">
+                        <div class="cat-inner-ear left"></div>
+                    </div>
+                    <div class="cat-ear right">
+                        <div class="cat-inner-ear right"></div>
+                    </div>
+                    
+                    <!-- 脸部 -->
+                    <div class="cat-face">
+                        <div class="cat-eye left"></div>
+                        <div class="cat-eye right"></div>
+                        <div class="cat-nose"></div>
+                        <div class="cat-mouth"></div>
+                        <div class="cat-tongue"></div>
+                        
+                        <!-- 胡须 -->
+                        <div class="cat-whisker left-top"></div>
+                        <div class="cat-whisker left-bottom"></div>
+                        <div class="cat-whisker right-top"></div>
+                        <div class="cat-whisker right-bottom"></div>
+                    </div>
+                </div>
+                
+                <!-- 尾巴 -->
+                <div class="cat-tail"></div>
+                
+                <!-- 腿部 -->
+                <div class="cat-leg front-left"></div>
+                <div class="cat-leg front-right"></div>
+                <div class="cat-leg back-left"></div>
+                <div class="cat-leg back-right"></div>
+            </div>
+        </div>
+        <!-- 对话泡泡 -->
+        <div class="cat-bubble" id="catBubble"></div>
+    </div>
+</body>
+</html> 
